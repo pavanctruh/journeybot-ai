@@ -19,7 +19,11 @@
     "hooks": "@/hooks"
   },
   "registries": {
+<<<<<<< HEAD
     "@magicui": "https://magicui.design/r/{name}.json",
     "@aceternity": "https://ui.aceternity.com/registry/{name}.json"
+=======
+    "@magicui": "https://magicui.design/r/{name}.json"
+>>>>>>> 1914cb2711da1b87cc19e24ae72744266672de40
   }
 }
