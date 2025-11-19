@@ -1,4 +1,5 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import React from "react";
@@ -7,6 +8,7 @@ import { HeroVideoDialog } from "@/components/ui/hero-video-dialog";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import PopularCityList from "./PopularCityList";
+import Link from "next/link"; // 👈 IMPORTANT
 
 export const suggestions = [
   {
@@ -31,22 +33,6 @@ function Hero() {
   const { user } = useUser();
   const router = useRouter();
 
-  const onSend = () => {
-    if (!user) {
-      router.push("/sign-in");
-      return;
-    }
-    router.push("/create-new-trip");
-  };
-
-  const handleSuggestionClick = (title: string) => {
-    if (!user) {
-      router.push("/sign-in");
-      return;
-    }
-    router.push("/create-new-trip");
-  };
-
   return (
     <div className="mt-6 flex flex-col items-center justify-center">
       {/* Hero Content */}
@@ -65,29 +51,26 @@ function Hero() {
         <div>
           <div className="border rounded-2xl p-4 relative">
             <Textarea
-              placeholder="create a trip from Paris to New York"
+              placeholder="Create a trip from Paris to New York"
               className="w-full h-28 bg-transparent border-none focus-visible:ring-0 shadow-none resize-none"
             />
-            <Button
-              size={"icon"}
-              className="absolute bottom-6 right-6"
-              onClick={onSend}
-            >
-              <Send className="h-4 w-4" />
-            </Button>
+
+            <Link href={user ? "/create-new-trip" : "/sign-in"}>
+              <Button size="icon" className="absolute bottom-6 right-6">
+                <Send className="h-4 w-4" />
+              </Button>
+            </Link>
           </div>
 
           {/* Suggestion List */}
           <div className="flex gap-5 pt-2 pb-3 flex-wrap justify-center">
             {suggestions.map((item, index) => (
-              <div
-                key={index}
-                onClick={() => handleSuggestionClick(item.title)}
-                className="flex items-center gap-2 border rounded-full p-2 cursor-pointer hover:bg-orange-600 hover:text-white transition-all"
-              >
-                {item.icon}
-                <h2 className="text-sm">{item.title}</h2>
-              </div>
+              <Link key={index} href={user ? "/create-new-trip" : "/sign-in"}>
+                <div className="flex items-center gap-2 border rounded-full p-2 cursor-pointer hover:bg-orange-600 hover:text-white transition-all">
+                  {item.icon}
+                  <h2 className="text-sm">{item.title}</h2>
+                </div>
+              </Link>
             ))}
           </div>
 
@@ -102,7 +85,7 @@ function Hero() {
         </div>
       </div>
 
-      {/*  Popular City List Section */}
+      {/* Popular City List Section */}
       <div className="w-full mt-10">
         <PopularCityList />
       </div>

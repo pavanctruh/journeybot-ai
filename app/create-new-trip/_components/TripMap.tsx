@@ -79,7 +79,7 @@ export default function TripMap({ tripData }: { tripData?: any }) {
       </div>
     );
 
-  // 🏨 Hotel coordinates
+  //  Hotel coordinates
   const hotels =
     tripData.hotels
       ?.filter((h: any) => h.geo_coordinates)
@@ -88,7 +88,7 @@ export default function TripMap({ tripData }: { tripData?: any }) {
         h.geo_coordinates.longitude,
       ]) || [];
 
-  // 🎯 Activity coordinates
+  //  Activity coordinates
   const activities =
     tripData.itinerary?.flatMap((d: any) =>
       d.activities
@@ -158,14 +158,14 @@ export default function TripMap({ tripData }: { tripData?: any }) {
         />
       )}
 
-      {/* 📍 Start Marker */}
+      {/*  Start Marker */}
       {routeCoords[0] && (
         <Marker position={routeCoords[0]} icon={startIcon}>
           <Popup>Start: {tripData.origin}</Popup>
         </Marker>
       )}
 
-      {/* 🏨 Hotels */}
+      {/*  Hotels */}
       {tripData.hotels?.map((h: any, i: number) =>
         h.geo_coordinates ? (
           <Marker
@@ -183,7 +183,7 @@ export default function TripMap({ tripData }: { tripData?: any }) {
         ) : null
       )}
 
-      {/* 🎢 Activities */}
+      {/*  Activities */}
       {tripData.itinerary?.map((day: any, dayIdx: number) =>
         day.activities?.map((act: any, actIdx: number) =>
           act.geo_coordinates ? (
@@ -209,7 +209,7 @@ export default function TripMap({ tripData }: { tripData?: any }) {
         )
       )}
 
-      {/* 📍 End Marker */}
+      {/*  End Marker */}
       {routeCoords.length > 1 && (
         <Marker position={routeCoords[routeCoords.length - 1]} icon={endIcon}>
           <Popup>Destination: {tripData.destination}</Popup>

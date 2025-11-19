@@ -56,7 +56,13 @@ export default function EmptyBoxState({
                 <p className="text-sm text-gray-500 dark:text-gray-400">
                   {item.description}
                 </p>
-                <Button onClick={onStartChat} className="mt-2 rounded-xl">
+                <Button
+                  onClick={() => {
+                    console.log("Chat with AI button clicked"); // MUST appear in console
+                    onStartChat(); // triggers showChat = true
+                  }}
+                  className="mt-2 rounded-xl"
+                >
                   Chat with AI
                 </Button>
               </div>

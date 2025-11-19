@@ -49,11 +49,11 @@ export default function FinalUI({ tripData }: { tripData?: TripPlan }) {
         </p>
       </div>
 
-      {/* 🏨 HOTELS */}
+      {/*  HOTELS */}
       {tripData.hotels && tripData.hotels.length > 0 && (
         <section>
           <h3 className="text-lg font-semibold mb-3 text-orange-600">
-            🏨 Recommended Hotels
+            Recommended Hotels
           </h3>
           <div className="grid gap-4">
             {tripData.hotels.map((hotel, idx) => (
@@ -78,7 +78,7 @@ export default function FinalUI({ tripData }: { tripData?: TripPlan }) {
                     </p>
                   </div>
                   <div className="mt-2 text-sm text-gray-700">
-                    💰 {hotel.price_per_night || "N/A"} | ⭐{" "}
+                    {hotel.price_per_night || "N/A"} | ⭐{" "}
                     {hotel.rating || "N/A"}/5
                   </div>
                 </div>
@@ -88,11 +88,11 @@ export default function FinalUI({ tripData }: { tripData?: TripPlan }) {
         </section>
       )}
 
-      {/* 🗓️ ITINERARY */}
+      {/*  ITINERARY */}
       {tripData.itinerary && tripData.itinerary.length > 0 && (
         <section>
           <h3 className="text-lg font-semibold mb-3 text-orange-600">
-            🗓️ Daily Itinerary
+            Daily Itinerary
           </h3>
           <div className="space-y-4">
             {tripData.itinerary.map((day, idx) => (
@@ -126,7 +126,7 @@ export default function FinalUI({ tripData }: { tripData?: TripPlan }) {
                         </p>
                         {act.best_time_to_visit && (
                           <p className="text-xs text-gray-500 mt-1">
-                            ⏰ Best time: {act.best_time_to_visit}
+                            Best time: {act.best_time_to_visit}
                           </p>
                         )}
                       </div>
