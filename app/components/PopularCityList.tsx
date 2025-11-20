@@ -33,11 +33,8 @@ const data = [
 
 export default function PopularCityList() {
   const cards = data.map((card, index) => (
-    <Card
-      key={index}
-      card={{ ...card, content: "Travel now!" }}
-      index={index}
-    />
+    // FIX: add default content
+    <Card key={index} card={{ ...card, content: "" }} index={index} />
   ));
 
   return (
