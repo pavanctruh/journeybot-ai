@@ -5,6 +5,7 @@ import React, {
   useState,
   createContext,
   useContext,
+  JSX,
 } from "react";
 import {
   IconArrowNarrowLeft,
@@ -25,7 +26,7 @@ type Card = {
   src: string;
   title: string;
   category: string;
-  content?: React.ReactNode;
+  content?: string;
 };
 
 export const CarouselContext = createContext<{
@@ -218,7 +219,7 @@ export const Card = ({
                 {card.title}
               </motion.p>
 
-              <div className="py-10">{card.content}</div>
+              <div className="py-10">{card.content ?? ""}</div>
             </motion.div>
           </div>
         )}
