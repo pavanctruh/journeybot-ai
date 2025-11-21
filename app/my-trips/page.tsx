@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
+import TripCard from "@/app/components/TripCard"; // ✅ IMPORT TRIPCARD
 
 export default function MyTripsPage() {
   const [trips, setTrips] = useState([]);
@@ -48,7 +49,7 @@ export default function MyTripsPage() {
       <h1 className="text-3xl font-bold mb-8 text-center text-orange-600">
         Your Saved Trips ✈️
       </h1>
-      /*{" "}
+
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {trips.map((trip: any, index) => (
           <TripCard key={index} trip={trip} />
