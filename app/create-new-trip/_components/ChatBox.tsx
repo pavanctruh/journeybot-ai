@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
+import type { JSX } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Send,
@@ -18,9 +19,6 @@ import {
   CalendarDays,
   Hotel,
 } from "lucide-react";
-import dynamic from "next/dynamic";
-
-const TripMap = dynamic(() => import("./TripMap"), { ssr: false });
 
 type Role = "bot" | "user";
 type Message = {
@@ -40,7 +38,6 @@ type Collected = {
 };
 
 export default function ChatBox({ onBack }: { onBack?: () => void }) {
-  //  state
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [step, setStep] = useState(0);
@@ -48,7 +45,6 @@ export default function ChatBox({ onBack }: { onBack?: () => void }) {
   const [data, setData] = useState<Collected>({});
   const [busy, setBusy] = useState(false);
 
-  //  refs/helpers
   const chatRef = useRef<HTMLDivElement>(null);
   const idCounter = useRef(0);
   const initialized = useRef(false);
@@ -57,7 +53,7 @@ export default function ChatBox({ onBack }: { onBack?: () => void }) {
   const append = (m: Message | Message[]) =>
     setMessages((prev) => [...prev, ...(Array.isArray(m) ? m : [m])]);
 
-  // auto scroll
+  // Auto scroll
   useEffect(() => {
     chatRef.current?.scrollTo({
       top: chatRef.current.scrollHeight,
@@ -65,7 +61,7 @@ export default function ChatBox({ onBack }: { onBack?: () => void }) {
     });
   }, [messages]);
 
-  // initial greeting
+  // Initial greeting
   useEffect(() => {
     if (initialized.current) return;
     initialized.current = true;
@@ -75,11 +71,11 @@ export default function ChatBox({ onBack }: { onBack?: () => void }) {
       role: "bot",
       text: "👋 Hi! I’m your AI trip assistant. Let’s plan your journey step by step!",
     });
+
     askStep(0);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Steps definition
+  // Steps
   const steps = useMemo(
     () => [
       {
@@ -89,22 +85,10 @@ export default function ChatBox({ onBack }: { onBack?: () => void }) {
           role: "bot",
           text: "Where are you travelling from and to?\n\nExample: `Hyderabad to Goa` or choose below.",
           options: [
-            {
-              label: "Hyderabad → Goa",
-              icon: <MapPin className="w-4 h-4 text-blue-500" />,
-            },
-            {
-              label: "Delhi → Jaipur",
-              icon: <MapPin className="w-4 h-4 text-pink-500" />,
-            },
-            {
-              label: "Bengaluru → Mumbai",
-              icon: <MapPin className="w-4 h-4 text-green-500" />,
-            },
-            {
-              label: "Chennai → Kochi",
-              icon: <MapPin className="w-4 h-4 text-purple-500" />,
-            },
+            { label: "Hyderabad → Goa", icon: <MapPin /> },
+            { label: "Delhi → Jaipur", icon: <MapPin /> },
+            { label: "Bengaluru → Mumbai", icon: <MapPin /> },
+            { label: "Chennai → Kochi", icon: <MapPin /> },
           ],
         }),
         handle: (answer: string) => {
@@ -122,26 +106,14 @@ export default function ChatBox({ onBack }: { onBack?: () => void }) {
           role: "bot",
           text: "Who are you travelling with?",
           options: [
-            {
-              label: "Just me",
-              icon: <User className="w-4 h-4 text-blue-400" />,
-            },
-            {
-              label: "Family",
-              icon: <Home className="w-4 h-4 text-yellow-400" />,
-            },
-            {
-              label: "Friends",
-              icon: <Users className="w-4 h-4 text-green-400" />,
-            },
-            {
-              label: "Couples",
-              icon: <Heart className="w-4 h-4 text-pink-500" />,
-            },
+            { label: "Just me", icon: <User /> },
+            { label: "Family", icon: <Home /> },
+            { label: "Friends", icon: <Users /> },
+            { label: "Couples", icon: <Heart /> },
           ],
         }),
         handle: (answer: string) =>
-          setData((d) => ({ ...d, peopleType: answer.toLowerCase() })),
+          setData((d) => ({ ...d, peopleType: answer })),
       },
       {
         key: "budget",
@@ -150,22 +122,12 @@ export default function ChatBox({ onBack }: { onBack?: () => void }) {
           role: "bot",
           text: "Choose your budget type:",
           options: [
-            {
-              label: "Cheap",
-              icon: <IndianRupeeIcon className="w-4 h-4 text-green-500" />,
-            },
-            {
-              label: "Moderate",
-              icon: <IndianRupeeIcon className="w-4 h-4 text-yellow-500" />,
-            },
-            {
-              label: "Luxury",
-              icon: <IndianRupeeIcon className="w-4 h-4 text-purple-500" />,
-            },
+            { label: "Cheap", icon: <IndianRupeeIcon /> },
+            { label: "Moderate", icon: <IndianRupeeIcon /> },
+            { label: "Luxury", icon: <IndianRupeeIcon /> },
           ],
         }),
-        handle: (answer: string) =>
-          setData((d) => ({ ...d, budget: answer.toLowerCase() })),
+        handle: (answer: string) => setData((d) => ({ ...d, budget: answer })),
       },
       {
         key: "tripType",
@@ -174,30 +136,15 @@ export default function ChatBox({ onBack }: { onBack?: () => void }) {
           role: "bot",
           text: "What kind of experiences are you looking for?",
           options: [
-            {
-              label: "Sightseeing",
-              icon: <Compass className="w-4 h-4 text-sky-500" />,
-            },
-            {
-              label: "Adventure",
-              icon: <Mountain className="w-4 h-4 text-red-500" />,
-            },
-            {
-              label: "Food",
-              icon: <Utensils className="w-4 h-4 text-yellow-500" />,
-            },
-            {
-              label: "Nightlife",
-              icon: <Moon className="w-4 h-4 text-purple-500" />,
-            },
-            {
-              label: "All",
-              icon: <MapPin className="w-4 h-4 text-green-500" />,
-            },
+            { label: "Sightseeing", icon: <Compass /> },
+            { label: "Adventure", icon: <Mountain /> },
+            { label: "Food", icon: <Utensils /> },
+            { label: "Nightlife", icon: <Moon /> },
+            { label: "All", icon: <MapPin /> },
           ],
         }),
         handle: (answer: string) =>
-          setData((d) => ({ ...d, tripType: answer.toLowerCase() })),
+          setData((d) => ({ ...d, tripType: answer })),
       },
       {
         key: "days",
@@ -211,16 +158,16 @@ export default function ChatBox({ onBack }: { onBack?: () => void }) {
             { label: "7 days" },
           ],
         }),
-        handle: (answer: string) => {
-          const n = parseInt(answer.replace(/\D/g, ""), 10) || 3;
-          setData((d) => ({ ...d, days: n }));
-        },
+        handle: (answer: string) =>
+          setData((d) => ({
+            ...d,
+            days: parseInt(answer.replace(/\D/g, ""), 10) || 3,
+          })),
       },
     ],
     []
   );
 
-  // Step / message helpers
   function askStep(i: number) {
     const base = steps[i]?.ask();
     if (base) append(base);
@@ -234,16 +181,18 @@ export default function ChatBox({ onBack }: { onBack?: () => void }) {
   }
 
   function handleAnswer(text: string) {
-    const current = steps[step];
     append({ id: genId("user"), role: "user", text });
-    current?.handle(text);
+    steps[step]?.handle(text);
     setTimeout(() => advance(), 100);
   }
 
-  // final confirmation summary
   function confirm() {
-    const summary = `✨ A ${data.days}-day ${data.peopleType} trip from ${data.fromCity} to ${data.toCity} with a ${data.budget} budget focused on ${data.tripType} experiences.`;
-    append({ id: genId("summary"), role: "bot", text: summary });
+    append({
+      id: genId("summary"),
+      role: "bot",
+      text: `✨ A ${data.days}-day ${data.peopleType} trip from ${data.fromCity} to ${data.toCity} with a ${data.budget} budget focused on ${data.tripType} experiences.`,
+    });
+
     append({
       id: genId("confirm"),
       role: "bot",
@@ -252,16 +201,13 @@ export default function ChatBox({ onBack }: { onBack?: () => void }) {
     });
   }
 
-  // AI Generation
   async function handleConfirm() {
     setBusy(true);
     append({
       id: genId("bot"),
       role: "bot",
-      text: "🧠 Generating itinerary with AI... please wait a moment.",
+      text: "🧠 Generating itinerary with AI... please wait...",
     });
-
-    console.log("📤 Sending request to /api/aimodel...");
 
     try {
       const res = await fetch("/api/aimodel", {
@@ -272,157 +218,121 @@ export default function ChatBox({ onBack }: { onBack?: () => void }) {
           messages: [
             {
               role: "user",
-              content: `Plan a ${data.days}-day ${data.tripType} trip from ${data.fromCity} to ${data.toCity} for a ${data.peopleType} group with a ${data.budget} budget.
-Include coordinates, hotels, total cost, per-person cost, and daily itinerary.`,
+              content: `Plan a ${data.days}-day ${data.tripType} trip from ${data.fromCity} to ${data.toCity} for ${data.peopleType} with ${data.budget} budget.`,
             },
           ],
         }),
       });
 
       const result = await res.json();
-      console.log("📩 Trip Response:", result);
 
       if (result.trip_plan) {
         setTripData(result.trip_plan);
         append({
           id: genId("done"),
           role: "bot",
-          text: "✅ Your itinerary is ready! Check the map and summary below 👇",
+          text: "✅ Your itinerary is ready! Check below 👇",
         });
       } else {
         append({
           id: genId("fail"),
           role: "bot",
-          text: `⚠️ Unable to generate trip plan.\n\n${
-            result.error || "Please try again."
-          }`,
+          text: "⚠️ Failed to generate trip.",
         });
       }
-    } catch (err) {
-      console.error("❌ Fetch error:", err);
+    } catch {
       append({
         id: genId("error"),
         role: "bot",
-        text: "❌ Something went wrong. Please try again.",
+        text: "❌ Something went wrong.",
       });
-    } finally {
-      setBusy(false);
     }
+
+    setBusy(false);
   }
 
-  // Render helpers (kept simple)
-  const renderMessage = (m: Message) => (
-    <div
-      key={m.id}
-      className={`mb-3 p-3 rounded-xl max-w-[80%] ${
-        m.role === "bot" ? "bg-gray-100 text-gray-800" : "bg-orange-100 ml-auto"
-      }`}
-    >
-      <div className="whitespace-pre-wrap">{m.text}</div>
-      {m.options && (
-        <div className="mt-3 flex gap-2 flex-wrap">
-          {m.options.map((opt) => (
-            <Button
-              key={opt.label}
-              size="sm"
-              variant="outline"
-              onClick={() =>
-                m.text.includes("generate")
-                  ? handleConfirm()
-                  : handleAnswer(opt.label)
-              }
-            >
-              {opt.icon}
-              {opt.label}
-            </Button>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-
-  // JSX
   return (
     <div className="flex w-full h-[calc(100vh-4.5rem)] overflow-hidden">
-      {/* Left Side — Chat */}
+      {/* LEFT SIDE - CHAT UI */}
       <div className="w-1/2 flex flex-col p-4 border-r overflow-y-auto">
-        <div ref={chatRef} className="flex-1 overflow-y-auto p-2">
-          {messages.map(renderMessage)}
+        <div ref={chatRef}>
+          {messages.map((m) => (
+            <div
+              key={m.id}
+              className={`mb-3 p-3 rounded-xl max-w-[80%] ${
+                m.role === "bot"
+                  ? "bg-gray-100 text-gray-800"
+                  : "bg-orange-100 ml-auto"
+              }`}
+            >
+              <div className="whitespace-pre-wrap">{m.text}</div>
+              {m.options && (
+                <div className="mt-3 flex gap-2 flex-wrap">
+                  {m.options.map((opt) => (
+                    <Button
+                      key={opt.label}
+                      size="sm"
+                      variant="outline"
+                      onClick={() =>
+                        m.text.includes("generate")
+                          ? handleConfirm()
+                          : handleAnswer(opt.label)
+                      }
+                    >
+                      {opt.icon}
+                      {opt.label}
+                    </Button>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
 
-          {/* Trip Summary */}
+          {/* TRIP SUMMARY */}
           {tripData && (
             <div className="mt-6 bg-gray-50 p-4 rounded-xl">
-              <h3 className="font-bold mb-2 flex items-center gap-2">
-                <CalendarDays className="w-5 h-5 text-orange-500" />
-                Trip Summary
+              <h3 className="font-bold flex items-center gap-2">
+                <CalendarDays /> Trip Summary
               </h3>
 
               {tripData.itinerary?.map((day: any) => (
-                <div key={day.day} className="mb-3">
-                  <p className="font-semibold">
-                    Day {day.day}: {day.day_plan}
+                <div key={day.day} className="mt-3">
+                  <p>
+                    <strong>Day {day.day}:</strong> {day.day_plan}
                   </p>
-                  <ul className="list-disc pl-5 text-sm text-gray-600">
-                    {day.activities?.map((act: any, i: number) => (
+                  <ul className="list-disc pl-5 text-sm">
+                    {day.activities.map((a: any, i: number) => (
                       <li key={i}>
-                        <strong>{act.place_name}</strong>: {act.place_details}
+                        {a.place_name}: {a.place_details}
                       </li>
                     ))}
                   </ul>
                 </div>
               ))}
-
-              {tripData.hotels && (
-                <>
-                  <h4 className="font-semibold flex items-center gap-2 mt-3">
-                    <Hotel className="w-4 h-4 text-green-600" /> Hotels for Stay
-                  </h4>
-                  <ul className="list-disc pl-5 text-sm text-gray-600">
-                    {tripData.hotels.map((h: any, i: number) => (
-                      <li key={i}>
-                        {h.hotel_name} — {h.hotel_address} ({h.price_per_night})
-                      </li>
-                    ))}
-                  </ul>
-                </>
-              )}
             </div>
           )}
         </div>
 
-        {/* Input Box */}
+        {/* CHAT INPUT */}
         <div className="flex items-center gap-2 mt-4">
           <Textarea
             placeholder="Type your answer..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                if (input.trim()) {
-                  handleAnswer(input.trim());
-                  setInput("");
-                }
-              }
-            }}
+            onKeyDown={(e) =>
+              e.key === "Enter" && !e.shiftKey && handleAnswer(input)
+            }
           />
-          <Button
-            onClick={() => {
-              if (input.trim()) {
-                handleAnswer(input.trim());
-                setInput("");
-              }
-            }}
-            disabled={busy}
-          >
+          <Button onClick={() => handleAnswer(input)} disabled={busy}>
             <Send className="w-4 h-4" />
           </Button>
         </div>
       </div>
 
-      {/* Right Side — Map */}
-      <div className="w-1/2">
-        <TripMap tripData={tripData} />
+      {/* 🚀 RIGHT SIDE EMPTY FOR FUTURE MAP */}
+      <div className="w-1/2 flex justify-center items-center text-gray-400">
+        {/* <TripMap tripData={tripData} />  <-- Later add here */}
+        <p>🗺️ Map will be added here later</p>
       </div>
     </div>
   );

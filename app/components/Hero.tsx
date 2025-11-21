@@ -7,7 +7,7 @@ import { Plane, Send, Globe2, Landmark } from "lucide-react";
 import { HeroVideoDialog } from "@/components/ui/hero-video-dialog";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import PopularCityList from "./PopularCityList";
+//import PopularCityList from "./PopularCityList";
 import Link from "next/link"; // 👈 IMPORTANT
 
 export const suggestions = [
@@ -86,9 +86,6 @@ function Hero() {
       </div>
 
       {/* Popular City List Section */}
-      <div className="w-full mt-10">
-        <PopularCityList />
-      </div>
     </div>
   );
 }
