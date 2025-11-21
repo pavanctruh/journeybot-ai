@@ -1,4 +1,4 @@
-"use client";
+/*"use client";
 
 import React from "react";
 import { Carousel, Card } from "@/components/ui/apple-cards-carousel";
@@ -43,3 +43,4 @@ export default function PopularCityList() {
     </div>
   );
 }
+  */
